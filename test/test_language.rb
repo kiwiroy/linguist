@@ -482,6 +482,20 @@ class TestLanguage < Minitest::Test
     assert_equal Language["Markdown"], match
   end
 
+  def test_detect_prefers_perldoc_for_pod
+    blob = Linguist::FileBlob.new(File.join(samples_path, "Pod/Response.pod"))
+    match = Linguist.detect(blob)
+    assert_equal Language["Pod"], match
+    blob = Linguist::FileBlob.new(File.join(samples_path, "Pod/documented_script.pod"))
+    match = Linguist.detect(blob)
+    assert_equal Language["Pod"], match
+    # Like https://github.com/github/markup/blob/master/lib/github/markup.rb#L95
+    file = File.join(samples_path, "Pod/Response.pod")
+    blob = Linguist::Blob.new(file, File.read(file), symlink: File.symlink?(file))
+    match = Linguist.detect(blob, allow_empty: true)
+    assert_equal Language["Pod"], match
+  end
+
   def test_fs_names
     Language.all.each do |language|
       next unless /[\\:*?"<>|]/.match(language.name)

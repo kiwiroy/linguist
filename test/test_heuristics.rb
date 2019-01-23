@@ -26,6 +26,8 @@ class TestHeuristics < Minitest::Test
 
   def test_symlink_empty
     assert_equal [], Heuristics.call(file_blob("Markdown/symlink.md"), [Language["Markdown"]])
+    assert_equal [], Heuristics.call(file_blob("Pod/documented_script.pod"), [Language["Pod"]])
+    assert_equal [], Heuristics.call(file_blob("Pod/Response.pod"), [Language["Pod"]])
   end
 
   def assert_heuristics(hash)
