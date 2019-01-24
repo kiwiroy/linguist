@@ -494,6 +494,15 @@ class TestLanguage < Minitest::Test
     blob = Linguist::Blob.new(file, File.read(file), symlink: File.symlink?(file))
     match = Linguist.detect(blob, allow_empty: true)
     assert_equal Language["Pod"], match
+    file = File.join(samples_path, "Pod/documented_script.pod")
+    blob = Linguist::Blob.new(file, File.read(file), symlink: File.symlink?(file))
+    match = Linguist.detect(blob, allow_empty: true)
+    assert_equal Language["Pod"], match
+    # when in memory and symlinked to a perl file
+    file = File.join(samples_path, "Pod/documented_script.pod")
+    blob = Linguist::Blob.new(file, File.read(file), symlink: false)
+    match = Linguist.detect(blob, allow_empty: true)
+    assert_equal Language["Perl"], match
   end
 
   def test_fs_names
