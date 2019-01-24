@@ -33,7 +33,7 @@ end
 def sample_blob_memory(name)
   filepath = (name =~ /^\//)? name : File.join(samples_path, name)
   content = File.read(filepath)
-  Linguist::Blob.new(name, content)
+  Linguist::Blob.new(name, content, symlink: File.symlink?(filepath))
 end
 
 def silence_warnings
